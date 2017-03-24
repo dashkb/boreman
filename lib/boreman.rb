@@ -6,13 +6,13 @@ module Boreman
   end
 
   def self.procfile_path
-    @procfile_path ||= "#{project_root}/Procfile"
+    @procfile_path ||= "#{app_dir}/Procfile"
   end
 
   # assumes command is run from in a git directory with a Procfile
   # TODO walk upwards from cwd looking for Procfile
-  def self.project_root
-    @project_root ||= `git rev-parse --show-toplevel`.chomp
+  def self.app_dir
+    @app_dir ||= ENV['BOREMAN_APP_DIR'] || `git rev-parse --show-toplevel`.chomp
   end
 
   def self.read_procfile
@@ -29,7 +29,7 @@ module Boreman
 
   # directory for keeping track of pid/status for this process
   def self.proc_dir(selector)
-    base = ENV['BOREMAN_PROC_DIR'] || "#{project_root}/.boreman"
+    base = ENV['BOREMAN_PROC_DIR'] || "#{app_dir}/.boreman"
 
     "#{base}/#{selector}".tap do |dir|
       `mkdir -p #{dir}`
