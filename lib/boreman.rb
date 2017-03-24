@@ -90,6 +90,7 @@ module Boreman
   def self.stop(selector, opts)
     if !is_running?(selector)
       puts "#{selector} is not currently running"
+      `rm #{pidfile(selector)}`
       return
     end
 
