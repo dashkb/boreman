@@ -1,0 +1,2 @@
+foo: bin/run-forever
+
