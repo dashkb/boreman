@@ -1,2 +1,2 @@
-foo: bin/run-forever
+foo: bin/run-forever $ARG
 

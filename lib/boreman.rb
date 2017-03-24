@@ -60,6 +60,12 @@ module Boreman
     File.write(pidfile(selector), pid)
   end
 
+  def self.prepare_command(cmd)
+    cmd.gsub(/\$([0-9A-Z_]+)/) do |var, v2|
+      ENV[$1]
+    end
+  end
+
   #
   # Actions
   #
@@ -71,6 +77,8 @@ module Boreman
     end
 
     if cmd = procs[selector]
+      cmd = prepare_command(cmd)
+
       pid = Process.spawn(cmd)
       write_pid selector, pid
       puts "Started #{selector}, pid = #{pid}"
