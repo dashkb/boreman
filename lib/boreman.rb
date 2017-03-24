@@ -82,6 +82,9 @@ module Boreman
   def self.restart(selector, opts)
     if is_running?(selector)
       stop selector, opts
+    elsif should_be_running?(selector)
+      puts "#{selector} should have been running but wasn't... 'restarting' anyway"
+      `rm #{pidfile(selector)}`
     end
 
     start selector, opts
@@ -90,7 +93,6 @@ module Boreman
   def self.stop(selector, opts)
     if !is_running?(selector)
       puts "#{selector} is not currently running"
-      `rm #{pidfile(selector)}`
       return
     end
 
