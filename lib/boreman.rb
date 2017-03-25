@@ -93,7 +93,7 @@ module Boreman
     if cmd = procs[selector]
       cmd = prepare_command(cmd)
 
-      pid = Process.spawn(cmd, out: '/var/log/syslog', err: '/var/log/syslog')
+      pid = Process.spawn("#{cmd} | logger -t app")
       Process.detach(pid)
       write_pid selector, pid
       puts "Started #{selector}, pid = #{pid}"
