@@ -98,7 +98,7 @@ module Boreman
         fpid = fork do
           STDOUT.reopen(w)
           r.close
-          pid = Process.spawn(cmd)
+          pid = Process.spawn("#{cmd} 2>&1 | logger -t #{'BOREMAN_SYSLOG_TAG'}")
           puts pid.to_s
           exit! 0
         end
