@@ -109,7 +109,7 @@ module Boreman
       return
     end
 
-    id       = pid(selector).to_i
+    id       = pgid(selector).to_i
     attempts = 0
 
     while is_running?(selector)
@@ -121,7 +121,7 @@ module Boreman
         signal = 'TERM'
       end
 
-      Process.kill(signal, pgid) rescue
+      Process.kill(signal, id) rescue
       sleep attempts
     end
 
