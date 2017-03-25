@@ -92,14 +92,13 @@ module Boreman
 
     if cmd = procs[selector]
       cmd = prepare_command(cmd)
-      tag = ENV['BOREMAN_SYSLOG_TAG'] || selector
 
       begin
         r, w = IO.pipe
         fpid = fork do
           STDOUT.reopen(w)
           r.close
-          pid = Process.spawn("#{cmd} 2>&1 | logger -t #{tag}")
+          pid = Process.spawn cmd
           puts pid.to_s
           exit! 0
         end
