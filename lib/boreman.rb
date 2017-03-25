@@ -45,7 +45,7 @@ module Boreman
   end
 
   def self.pgid(selector)
-    `ps -o pgid= #{pid}`.chomp
+    `ps -o pgid= #{pid(selector)}`.chomp
   end
 
   def self.should_be_running?(selector)
