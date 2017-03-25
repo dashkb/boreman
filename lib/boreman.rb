@@ -119,19 +119,20 @@ module Boreman
       return
     end
 
-    id       = pgid(selector).to_i
+    id       = pid(selector).to_i
+    pgid     = -1 * pgid(selector).to_i
     attempts = 0
 
     while is_running?(selector)
       attempts += 1
       if attempts > 5
-        puts "attempt number #{attempts}; using KILL"
+        puts "attempt number #{attempts}; using KILL on #{pgid}"
         signal = 'KILL'
       else
         signal = 'TERM'
       end
 
-      Process.kill(signal, id) rescue
+      Process.kill(signal, pgid) rescue
       sleep attempts
     end
 
