@@ -12,4 +12,6 @@ end.parse!
 action   = ARGV[0]
 selector = ARGV[1]
 
+Process.setsid
+
 Boreman.run action, selector, opts
