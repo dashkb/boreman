@@ -74,6 +74,16 @@ module Boreman
   # Actions
   #
 
+  def self.status(selector, opts)
+    if is_running? selector
+      puts "#{selector} is running, pid #{pid(selector)}"
+    elsif should_be_running? selector
+      puts "#{selector} should be running, but isn't #{pid(selector)}"
+    else
+      puts "#{selector} is stopped"
+    end
+  end
+
   def self.start(selector, opts)
     if should_be_running?(selector)
       puts "#{selector} should already be running, deal with that first"
