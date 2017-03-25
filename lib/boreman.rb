@@ -95,17 +95,24 @@ module Boreman
 
       begin
         r, w = IO.pipe
+
         fpid = fork do
           STDOUT.reopen(w)
+
           r.close
-          pid = Process.spawn cmd
+
+          pid = Process.spawn cmd, pgroup: true
+
           puts pid.to_s
+
           exit! 0
         end
 
-        Process.waitpid(fpid)
+        pid = r.gets.chomp.to_i
 
-        pid = r.gets.chomp
+        Process.detach(fpid)
+        Process.detach(pid)
+
         write_pid selector, pid
         puts "Started #{selector}, pid = #{pid}"
       ensure

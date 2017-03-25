@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 while true
-  sleep 5
-  `echo "slept #{Process.pid}" | logger -t cmd`
+  sleep 2
+  puts "slept, #{Process.pid}"
+  `echo "foo" | logger -t ruby`
 end

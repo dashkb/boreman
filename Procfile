@@ -1,2 +1,2 @@
-foo: bin/run-forever $ARG
+foo: bin/run-forever > ./forever.log
 
