@@ -19,3 +19,6 @@ action   = ARGV[0]
 selector = ARGV[1]
 
 Boreman.run action, selector, opts
+
+puts "Thanks for using Boreman!"
+exit
