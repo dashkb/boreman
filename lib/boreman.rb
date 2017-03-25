@@ -93,10 +93,25 @@ module Boreman
     if cmd = procs[selector]
       cmd = prepare_command(cmd)
 
-      pid = Process.spawn(cmd)
-      Process.detach(pid)
-      write_pid selector, pid
-      puts "Started #{selector}, pid = #{pid}"
+      begin
+        r, w = IO.pipe
+        fpid = fork do
+          STDOUT.reopen(w)
+          r.close
+          pid = Process.spawn(cmd)
+          puts pid.to_s
+          exit! 0
+        end
+
+        Process.waitpid(fpid)
+
+        pid = r.gets.chomp
+        write_pid selector, pid
+        puts "Started #{selector}, pid = #{pid}"
+      ensure
+        r.close rescue nil
+        w.close rescue nil
+      end
     else
       puts "Entry #{selector} not found in Procfile"
     end
