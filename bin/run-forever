@@ -2,7 +2,9 @@
 
 puts ARGV[0]
 
-while true
-  sleep 1
-  puts "slept"
-end
+puts ENV['FOO_ENV']
+
+# while true
+#   sleep 1
+#   puts "slept"
+# end

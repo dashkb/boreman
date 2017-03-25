@@ -80,6 +80,7 @@ module Boreman
       cmd = prepare_command(cmd)
 
       pid = Process.spawn(cmd)
+      Process.detach(pid)
       write_pid selector, pid
       puts "Started #{selector}, pid = #{pid}"
     else
