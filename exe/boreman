@@ -1,17 +1,23 @@
 #!/usr/bin/env ruby
 
 require 'boreman'
+require 'boreman/version'
 require 'optparse'
 
 opts = {}
 
 OptionParser.new do |o|
   o.banner = 'Usage: boreman [start|stop|restart|status] [selector]'
+
+  o.on('--version', '-v') do
+    puts Boreman::VERSION
+    exit
+  end
 end.parse!
 
 action   = ARGV[0]
 selector = ARGV[1]
 
-Process.setsid
+Process.setsid rescue
 
 Boreman.run action, selector, opts
