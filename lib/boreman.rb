@@ -44,6 +44,10 @@ module Boreman
     should_be_running?(selector) and File.read(pidfile(selector))
   end
 
+  def self.pgid(selector)
+    `ps -o pgid= #{pid}`.chomp
+  end
+
   def self.should_be_running?(selector)
     File.exists? pidfile(selector)
   end
@@ -117,7 +121,7 @@ module Boreman
         signal = 'TERM'
       end
 
-      Process.kill(signal, id) rescue
+      Process.kill(signal, pgid) rescue
       sleep attempts
     end
 
