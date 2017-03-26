@@ -1,4 +1,5 @@
 require "boreman/version"
+require "boreman/daemonize"
 
 module Boreman
   def self.run(action, selector, opts = {})
@@ -93,32 +94,13 @@ module Boreman
     if cmd = procs[selector]
       cmd = prepare_command(cmd)
 
-      begin
-        r, w = IO.pipe
-
-        fpid = fork do
-          STDOUT.reopen(w)
-
-          r.close
-
-          pid = Process.spawn cmd, pgroup: true
-
-          puts pid.to_s
-
-          exit! 0
-        end
-
-        pid = r.gets.chomp.to_i
-
-        Process.detach(fpid)
-        Process.detach(pid)
-
-        write_pid selector, pid
-        puts "Started #{selector}, pid = #{pid}"
-      ensure
-        r.close rescue nil
-        w.close rescue nil
+      run = Proc.new do
+        Kernel.exec cmd
       end
+
+      pid = Daemonize.call_as_daemon run
+      write_pid selector, pid
+      puts "Started #{selector}, pid = #{pid}"
     else
       puts "Entry #{selector} not found in Procfile"
     end
